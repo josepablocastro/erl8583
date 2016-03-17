@@ -169,16 +169,22 @@ marshal_data_element({n, llvar, Length}, FieldValue) when length(FieldValue) =< 
 	erl8583_convert:integer_to_string(length(FieldValue), 2) ++ FieldValue;
 marshal_data_element({n, lllvar, Length}, FieldValue) when length(FieldValue) =< Length ->
 	erl8583_convert:integer_to_string(length(FieldValue), 3) ++ FieldValue;
+marshal_data_element({n, llllvar, Length}, FieldValue) when length(FieldValue) =< Length ->
+	erl8583_convert:integer_to_string(length(FieldValue), 4) ++ FieldValue;
 marshal_data_element({ns, llvar, Length}, FieldValue) when length(FieldValue) =< Length ->
 	erl8583_convert:integer_to_string(length(FieldValue), 2) ++ FieldValue;
 marshal_data_element({an, llvar, Length}, FieldValue) when length(FieldValue) =< Length ->
 	erl8583_convert:integer_to_string(length(FieldValue), 2) ++ FieldValue;
 marshal_data_element({an, lllvar, Length}, FieldValue) when length(FieldValue) =< Length ->
 	erl8583_convert:integer_to_string(length(FieldValue), 3) ++ FieldValue;
+marshal_data_element({an, llllvar, Length}, FieldValue) when length(FieldValue) =< Length ->
+	erl8583_convert:integer_to_string(length(FieldValue), 4) ++ FieldValue;
 marshal_data_element({ans, llvar, Length}, FieldValue) when length(FieldValue) =< Length ->
 	erl8583_convert:integer_to_string(length(FieldValue), 2) ++ FieldValue;
 marshal_data_element({ans, lllvar, Length}, FieldValue) when length(FieldValue) =< Length ->
 	erl8583_convert:integer_to_string(length(FieldValue), 3) ++ FieldValue;
+marshal_data_element({ans, llllvar, Length}, FieldValue) when length(FieldValue) =< Length ->
+	erl8583_convert:integer_to_string(length(FieldValue), 4) ++ FieldValue;
 marshal_data_element({n, fixed, Length}, FieldValue) when length(FieldValue) =< Length ->
 	IntValue = list_to_integer(FieldValue),
 	erl8583_convert:integer_to_string(IntValue, Length);
@@ -200,6 +206,9 @@ unmarshal_data_element({n, llvar, _MaxLength}, AsciiFields) ->
 unmarshal_data_element({n, lllvar, _MaxLength}, AsciiFields) ->
 	{N, Rest} = lists:split(3, AsciiFields),
 	lists:split(list_to_integer(N), Rest);
+unmarshal_data_element({n, llllvar, _MaxLength}, AsciiFields) ->
+	{N, Rest} = lists:split(4, AsciiFields),
+	lists:split(list_to_integer(N), Rest);
 unmarshal_data_element({ns, llvar, _MaxLength}, AsciiFields) ->
 	{N, Rest} = lists:split(2, AsciiFields),
 	lists:split(list_to_integer(N), Rest);
@@ -209,11 +218,17 @@ unmarshal_data_element({an, llvar, _MaxLength}, AsciiFields) ->
 unmarshal_data_element({an, lllvar, _MaxLength}, AsciiFields) ->
 	{N, Rest} = lists:split(3, AsciiFields),
 	lists:split(list_to_integer(N), Rest);
+unmarshal_data_element({an, llllvar, _MaxLength}, AsciiFields) ->
+	{N, Rest} = lists:split(4, AsciiFields),
+	lists:split(list_to_integer(N), Rest);
 unmarshal_data_element({ans, llvar, _MaxLength}, AsciiFields) ->
 	{N, Rest} = lists:split(2, AsciiFields),
 	lists:split(list_to_integer(N), Rest);
 unmarshal_data_element({ans, lllvar, _MaxLength}, AsciiFields) ->
 	{N, Rest} = lists:split(3, AsciiFields),
+	lists:split(list_to_integer(N), Rest);
+unmarshal_data_element({ans, llllvar, _MaxLength}, AsciiFields) ->
+	{N, Rest} = lists:split(4, AsciiFields),
 	lists:split(list_to_integer(N), Rest);
 unmarshal_data_element({n, fixed, Length}, AsciiFields) ->
 	lists:split(Length, AsciiFields);
